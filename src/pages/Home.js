@@ -1,9 +1,14 @@
 import React from "react";
+import CTA from "../styled/CTA";
+import { Accent, StyledTitle } from "../styled/Random";
 
 export default function Home() {
   return (
     <div>
-      <h1> Home </h1>
+      <StyledTitle> Ready to type? </StyledTitle>
+      <CTA to="/game">
+        Click or type <Accent>'s'</Accent> to start playing!
+      </CTA>
     </div>
   );
 }
