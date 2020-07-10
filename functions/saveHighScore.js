@@ -11,7 +11,7 @@ const table = base.table(process.env.AIRTABLE_TABLE);
 exports.handler = async (event) => {
   console.log(event);
 
-  if (event.HTTPMethod !== "POST") {
+  if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
       body: JSON.stringify({ err: "That method is not allowed" }),
