@@ -9,6 +9,15 @@ const base = Airtable.base(process.env.AIRTABLE_BASE);
 const table = base.table(process.env.AIRTABLE_TABLE);
 
 exports.handler = async (event) => {
+  console.log(event);
+
+  if (event.HTTPMethod !== "POST") {
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ err: "That method is not allowed" }),
+    };
+  }
+
   try {
     const records = await table
       .select({
