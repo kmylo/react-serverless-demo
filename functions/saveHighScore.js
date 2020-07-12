@@ -1,12 +1,4 @@
-require("dotenv").config();
-const Airtable = require("airtable");
-
-Airtable.configure({
-  apiKey: process.env.AIRTABLE_API_KEY,
-});
-
-const base = Airtable.base(process.env.AIRTABLE_BASE);
-const table = base.table(process.env.AIRTABLE_TABLE);
+const { table, getHighScores } = require("./utils/airtable");
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
@@ -25,24 +17,9 @@ exports.handler = async (event) => {
     };
   }
 
-  console.log(score);
-
   try {
-    const records = await table
-      .select({
-        sort: [{ field: "score", direction: "desc" }],
-        // filterByFormula: `AND(name != "", score > 0)`,
-      })
-      .firstPage();
-
-    const formattedRecords = records.map((record) => ({
-      id: record.id,
-      fields: record.fields,
-    }));
-
-    console.log(formattedRecords);
-    const lowestRecord = formattedRecords[formattedRecords.length - 1];
-    console.log(lowestRecord);
+    const records = await getHighScores();
+    const lowestRecord = records[records.length - 1];
 
     if (
       typeof lowestRecord.fields.score === "undefined" ||
@@ -53,12 +30,11 @@ exports.handler = async (event) => {
         fields: { name, score },
       };
 
-      console.log("updatedRecord", updatedRecord);
-
       await table.update([updatedRecord]);
+
       return {
         statusCode: 200,
-        body: JSON.stringify(formattedRecords),
+        body: JSON.stringify(updatedRecord),
       };
     } else {
       return {
@@ -67,6 +43,7 @@ exports.handler = async (event) => {
       };
     }
   } catch (err) {
+    console.log(err);
     return {
       statusCode: 500,
       body: JSON.stringify({ err: "Failed to save score in Airtable." }),
