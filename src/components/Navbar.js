@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 import {
   StyledNavbar,
@@ -10,6 +11,8 @@ import {
 import { Accent } from "../styled/Random";
 
 export default function Navbar() {
+  const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0();
+
   return (
     <StyledNavbar>
       <StyledNavBrand>
@@ -24,6 +27,21 @@ export default function Navbar() {
         <li>
           <StyledLink to="/highScores">High Scores</StyledLink>
         </li>
+        {isAuthenticated ? (
+          <>
+            <li>
+              <button
+                onClick={() => logout({ returnTo: window.location.origin })}
+              >
+                {user["https://learnbuildtype/username"]} | Log Out
+              </button>
+            </li>
+          </>
+        ) : (
+          <li>
+            <button onClick={() => loginWithRedirect()}>Log In</button>
+          </li>
+        )}
       </StyledNavItems>
     </StyledNavbar>
   );
