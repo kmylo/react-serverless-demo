@@ -9,6 +9,7 @@ import {
   StyledLink,
 } from "../styled/Navbar";
 
+import { StyledButtonLink, StyledButton } from "../styled/Buttons";
 import { Accent } from "../styled/Random";
 
 export default function Navbar({ toggleTheme }) {
@@ -31,19 +32,21 @@ export default function Navbar({ toggleTheme }) {
         {isAuthenticated ? (
           <>
             <li>
-              <button
+              <StyledButtonLink
                 onClick={() => logout({ returnTo: window.location.origin })}
               >
                 {user["https://learnbuildtype/username"]} | Log Out
-              </button>
+              </StyledButtonLink>
             </li>
           </>
         ) : (
           <li>
-            <button onClick={() => loginWithRedirect()}>Log In</button>
+            <StyledButtonLink onClick={() => loginWithRedirect()}>
+              Log In
+            </StyledButtonLink>
           </li>
         )}
-        <button onClick={toggleTheme}>Toggle Theme</button>
+        <StyledButton onClick={toggleTheme}>Toggle Theme</StyledButton>
       </StyledNavItems>
     </StyledNavbar>
   );
