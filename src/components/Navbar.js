@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import useTheme from "../hooks/UseTheme";
 
 import {
   StyledNavbar,
@@ -10,7 +11,7 @@ import {
 
 import { Accent } from "../styled/Random";
 
-export default function Navbar() {
+export default function Navbar({ toggleTheme }) {
   const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0();
 
   return (
@@ -42,6 +43,7 @@ export default function Navbar() {
             <button onClick={() => loginWithRedirect()}>Log In</button>
           </li>
         )}
+        <button onClick={toggleTheme}>Toggle Theme</button>
       </StyledNavItems>
     </StyledNavbar>
   );
